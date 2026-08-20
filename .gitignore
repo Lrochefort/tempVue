@@ -102,3 +102,8 @@ public
 
 # FuseBox cache
 .fusebox/
+
+# .github
+.github/prompts/
+.github/agents/
+.github/instructions/
