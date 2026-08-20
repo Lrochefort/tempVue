@@ -1,0 +1,44 @@
+packages:
+  - 'apps/*'
+  - 'packages/*'
+
+minimumReleaseAgeExclude:
+  - '@lrochefort/vue-final-modal@5.0.0-rc.1'
+  - vite@8.2.2
+
+# Single source of truth for dependency versions across the monorepo.
+# Workspace packages reference these with the `catalog:` protocol.
+catalog:
+  # runtime
+  '@lrochefort/vue-final-modal': 5.0.0-rc.1
+  '@vue/devtools-api': ^8.2.1
+  '@vueuse/core': ^14.4.0
+  '@vueuse/integrations': ^14.4.0
+  focus-trap: ^8.2.2
+  pinia: ^4.0.3
+  vue: ^3.5.41
+  vue-router: ^5.2.0
+
+  # build / tooling (oxc-powered)
+  '@vitejs/plugin-vue': ^6.0.8
+  '@vitejs/plugin-vue-jsx': ^5.1.6
+  oxfmt: ^0.64.0
+  oxlint: ^1.79.0
+  tsdown: ^0.22.14
+  # vue-tsc drives the JS-based compiler; TypeScript 7 (the native port) does not
+  # expose `lib/tsc`, so the toolchain stays on the 6.x line for now.
+  typescript: ^6.0.3
+  vite: ^8.2.2
+  vite-plugin-vue-devtools: ^8.2.1
+  vue-tsc: ^3.3.10
+
+  # testing
+  '@pinia/testing': ^2.0.1
+  '@vitest/coverage-v8': ^4.1.11
+  '@vitest/ui': ^4.1.11
+  '@vue/test-utils': ^2.4.11
+  jsdom: ^30.0.1
+  vitest: ^4.1.11
+
+  # types
+  '@types/node': ^26.2.0

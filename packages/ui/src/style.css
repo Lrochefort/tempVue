@@ -1,0 +1,19 @@
+:root {
+  --ui-radius: 0.5rem;
+  --ui-color-primary: #10b981;
+  --ui-color-primary-contrast: #04231a;
+  --ui-color-danger: #f43f5e;
+  --ui-color-surface: #ffffff;
+  --ui-color-border: #d4d4d8;
+  --ui-color-text: #18181b;
+  --ui-color-muted: #71717a;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --ui-color-surface: #18181b;
+    --ui-color-border: #3f3f46;
+    --ui-color-text: #fafafa;
+    --ui-color-muted: #a1a1aa;
+  }
+}

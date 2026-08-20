@@ -78,6 +78,25 @@ public
 # vuepress build output
 .vuepress/dist
 
+# --- Vite / pnpm monorepo ---
+.vite/
+**/node_modules/.vite/
+*.local
+.DS_Store
+.oxlintcache
+
+# Vite static assets must stay tracked (the generic `public` rule above is for Gatsby)
+!apps/*/public/
+!packages/*/public/
+
+# Editor
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
 # Serverless directories
 .serverless/
 
