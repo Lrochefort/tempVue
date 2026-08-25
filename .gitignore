@@ -110,3 +110,7 @@ public
 
 # Local working notes (plans, scratch analysis)
 notes/
+
+# Playwright artifacts
+test-results/
+playwright-report/
