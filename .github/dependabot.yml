@@ -1,0 +1,14 @@
+version: 2
+
+updates:
+  # Keeps action majors current, so the next CodeQL/checkout deprecation
+  # arrives as a PR instead of a broken workflow.
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: monthly
+    commit-message:
+      prefix: 'ci'
+    groups:
+      actions:
+        patterns: ['*']
