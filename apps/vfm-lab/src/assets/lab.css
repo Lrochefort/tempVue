@@ -1,0 +1,203 @@
+/**
+ * Variant Lab theme.
+ *
+ * Plain CSS on purpose: the lab must not pull a component framework into the
+ * dependency graph it is supposed to be testing. Everything here is either a
+ * design token, a base element rule, or a `lab-*` utility used by the views.
+ */
+
+:root {
+  color-scheme: dark;
+
+  --lab-bg: #0b0b12;
+  --lab-bg-elevated: #13131d;
+  --lab-surface: rgb(255 255 255 / 4%);
+  --lab-surface-hover: rgb(255 255 255 / 7%);
+  --lab-border: rgb(255 255 255 / 10%);
+  --lab-border-strong: rgb(255 255 255 / 18%);
+
+  --lab-text: #ecedf5;
+  --lab-text-muted: #9497b0;
+  --lab-text-faint: #6b6d85;
+
+  --lab-accent: #7c6cff;
+  --lab-accent-soft: #a99bff;
+  --lab-accent-glow: rgb(124 108 255 / 35%);
+  --lab-warn: #ffb057;
+
+  --lab-radius: 14px;
+  --lab-radius-sm: 9px;
+  --lab-shadow: 0 18px 50px rgb(0 0 0 / 45%);
+  --lab-ring: 0 0 0 3px var(--lab-accent-glow);
+
+  --lab-font:
+    ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --lab-mono: ui-monospace, 'SF Mono', 'Cascadia Code', 'JetBrains Mono', Consolas, monospace;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: var(--lab-font);
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--lab-text);
+  background-color: var(--lab-bg);
+  /* Two soft accent pools so large empty areas still read as designed. */
+  background-image:
+    radial-gradient(1100px 620px at 12% -12%, rgb(124 108 255 / 20%), transparent 60%),
+    radial-gradient(900px 520px at 92% 4%, rgb(56 189 248 / 12%), transparent 55%);
+  background-attachment: fixed;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3 {
+  margin: 0;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  font-weight: 650;
+}
+
+p {
+  margin: 0;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+code {
+  font-family: var(--lab-mono);
+  font-size: 0.86em;
+  padding: 0.1em 0.4em;
+  border-radius: 6px;
+  border: 1px solid var(--lab-border);
+  background: rgb(124 108 255 / 12%);
+  color: var(--lab-accent-soft);
+}
+
+:focus-visible {
+  outline: none;
+  box-shadow: var(--lab-ring);
+  border-radius: var(--lab-radius-sm);
+}
+
+/* ---------------------------------------------------------------- layout -- */
+
+.lab-shell {
+  width: min(1120px, 100% - 3rem);
+  margin-inline: auto;
+  padding-block: 2.5rem 5rem;
+}
+
+/* --------------------------------------------------------------- buttons -- */
+
+/*
+ * Variant components render bare `<button>` elements so their markup stays
+ * about the library, not about styling. The lab dresses them globally.
+ */
+.lab-demo button,
+.lab-modal button,
+.lab-btn {
+  font: inherit;
+  font-weight: 550;
+  cursor: pointer;
+  padding: 0.5rem 1.1rem;
+  border-radius: 999px;
+  border: 1px solid var(--lab-border-strong);
+  background: var(--lab-surface);
+  color: var(--lab-text);
+  transition:
+    background 0.18s ease,
+    border-color 0.18s ease,
+    transform 0.12s ease;
+}
+
+.lab-demo button:hover,
+.lab-modal button:hover,
+.lab-btn:hover {
+  background: var(--lab-surface-hover);
+  border-color: var(--lab-accent);
+}
+
+.lab-demo button:active,
+.lab-modal button:active,
+.lab-btn:active {
+  transform: translateY(1px);
+}
+
+/* The first action in a demo or a modal is the primary one. */
+.lab-demo button[data-testid='trigger'],
+.lab-modal button[data-testid='confirm'] {
+  border-color: transparent;
+  background: linear-gradient(135deg, var(--lab-accent), #b06cff);
+  color: #fff;
+  box-shadow: 0 8px 24px var(--lab-accent-glow);
+}
+
+.lab-demo button[data-testid='trigger']:hover,
+.lab-modal button[data-testid='confirm']:hover {
+  filter: brightness(1.1);
+}
+
+/* --------------------------------------------------- vue-final-modal skin -- */
+
+.vfm {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+}
+
+.vfm__overlay {
+  background-color: rgb(6 6 12 / 72%);
+  backdrop-filter: blur(6px);
+}
+
+.vfm__content {
+  max-height: 100%;
+  overflow: auto;
+}
+
+/* Shared modal card, also used by variants that inline their own content. */
+.lab-modal {
+  width: min(34rem, 100%);
+  padding: 1.6rem;
+  border-radius: var(--lab-radius);
+  border: 1px solid var(--lab-border-strong);
+  background:
+    linear-gradient(var(--lab-bg-elevated), var(--lab-bg-elevated)) padding-box,
+    linear-gradient(140deg, rgb(124 108 255 / 60%), transparent 55%) border-box;
+  box-shadow: var(--lab-shadow);
+  color: var(--lab-text);
+}
+
+.lab-modal h2 {
+  font-size: 1.15rem;
+  margin-bottom: 0.6rem;
+}
+
+.lab-modal p {
+  color: var(--lab-text-muted);
+}
+
+.lab-modal > * + * {
+  margin-top: 0.75rem;
+}
+
+.lab-modal button + button {
+  margin-left: 0.5rem;
+}

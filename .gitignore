@@ -107,3 +107,6 @@ public
 .github/prompts/
 .github/agents/
 .github/instructions/
+
+# Local working notes (plans, scratch analysis)
+notes/

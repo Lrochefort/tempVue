@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "pnpm --filter @tempvue/web dev",
-    "build": "pnpm --filter @tempvue/utils build && pnpm --filter @tempvue/web build",
+    "dev:lab": "pnpm --filter @tempvue/vfm-lab dev",
+    "build": "pnpm --filter @tempvue/utils build && pnpm --filter @tempvue/web build && pnpm --filter @tempvue/vfm-lab build",
     "preview": "pnpm --filter @tempvue/web preview",
     "test": "vitest run",
     "test:watch": "vitest",
