@@ -7,10 +7,16 @@ and every variant is covered by a unit test. The point is not to test the app �
 the app exists so the library can be certified.
 
 ```bash
-pnpm dev:lab          # browse the gallery at http://localhost:5174
-pnpm test             # run every project's unit tests
-pnpm test:coverage    # vfm-lab is held to 90%, the repo default is 80%
+pnpm dev:lab                  # browse the gallery at http://localhost:5174
+pnpm test --project vfm-lab   # this app's 71 spec files only
+pnpm test                     # every project in the monorepo
+pnpm test:coverage            # vfm-lab is held to 90%, the repo default is 80%
 ```
+
+Coverage thresholds are set in the **root** `vitest.config.ts`, not here — Vitest
+computes coverage across the whole run, so a per-project threshold would be ignored.
+
+See the [repo README](../../README.md) for workspace-wide setup and scripts.
 
 ## How it is organised
 
@@ -19,10 +25,14 @@ src/
   variants/<group>/<Variant>.vue     one configuration of the library
   variants/<group>/<Variant>.spec.ts its unit test (mandatory, enforced)
   variants/registry.ts               the single source of truth
+  variants/types.ts                  VARIANT_GROUPS, VariantMeta, Variant
   variants/registry.spec.ts          meta-test: no orphans, no gaps
   variants/conformance.spec.ts       contracts shared by every variant
+  components/ModalBody.vue           the heading/close chrome every variant reuses
+  components/LabDialog.vue           the gallery's own dialog, not under test
   views/                             the gallery shell
   router/index.ts                    routes generated from the registry
+  assets/lab.css                     gallery styling
   test/helpers.ts                    the shared mounting/interaction harness
 ```
 
@@ -59,11 +69,21 @@ Every variant follows the same shape so the harness can drive it generically:
 | `swipe`       | 9     | `swipeToClose`, `threshold`, swipe banner, navigation gestures         |
 | `composition` | 11    | `useModal`, `useModalSlot`, `useVfm`, `useVfmAttrs`, `getModalExposed` |
 
+## The harness
+
+`src/test/helpers.ts` is what keeps 67 specs short. `mountVariant()` mounts a
+variant against a fresh `Vfm` instance and a dedicated container — not
+`document.body`, otherwise a modal that teleports to `body` is indistinguishable
+from one that renders in place. Around it sit `queryRoot()`, `queryOverlay()`,
+`queryContent()`, their `queryAll*` counterparts, `queryTestId()` and
+`isContentVisible()`, all reading from the document rather than the wrapper
+because the modal is teleported out of it.
+
 ## jsdom caveats
 
-Unit tests run in jsdom, which never computes layout. Three shims in
-`src/test/helpers.ts` bridge the gap; each one is a real constraint on what
-Phase 1 can prove, and the rest belongs to Phase 2 (e2e).
+Unit tests run in jsdom, which never computes layout. Two shims in
+`src/test/helpers.ts` bridge the gap, and one gap cannot be bridged at all. Each
+is a real constraint on what Phase 1 can prove; the rest belongs to Phase 2 (e2e).
 
 - **`stubVisibleRects()`** — `focus-trap` refuses to activate unless `tabbable`
   finds a visible node, and its default `displayCheck: 'full'` relies on
@@ -73,9 +93,9 @@ Phase 1 can prove, and the rest belongs to Phase 2 (e2e).
 - **`stubElementBox()`** — swipe-to-close divides by the element's measured size.
   With jsdom's zero-sized boxes the offset degenerates to `-0`, which cancels the
   gesture (see F4 below).
-- **Scroll lock** is observable, but the numbers are not realistic:
-  `document.documentElement.clientWidth` is `0`, so the reserved scrollbar gap
-  equals the full `window.innerWidth`.
+- **Scroll lock** has no shim: it is observable, but the numbers are not
+  realistic. `document.documentElement.clientWidth` is `0`, so the reserved
+  scrollbar gap equals the full `window.innerWidth`.
 
 Swipe gestures are driven with **`MouseEvent`**, not touch events: the library's
 vendored swipe reads `event.targetTouches[0]`, which synthetic `TouchEvent`s

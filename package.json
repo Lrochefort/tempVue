@@ -18,7 +18,7 @@
     "format:check": "oxfmt --check",
     "typecheck": "pnpm -r --parallel typecheck",
     "check": "pnpm run format:check && pnpm run lint && pnpm run typecheck && pnpm run test",
-    "clean": "rimraf coverage \"apps/*/dist\" \"packages/*/dist\""
+    "clean": "rimraf --glob coverage \"apps/*/dist\" \"packages/*/dist\""
   },
   "devDependencies": {
     "@types/node": "catalog:",

@@ -85,6 +85,12 @@ public
 .DS_Store
 .oxlintcache
 
+# Playwright run artifacts
+test-results/
+playwright-report/
+blob-report/
+.playwright/
+
 # Vite static assets must stay tracked (the generic `public` rule above is for Gatsby)
 !apps/*/public/
 !packages/*/public/
@@ -107,6 +113,7 @@ public
 .github/prompts/
 .github/agents/
 .github/instructions/
+.github/copilot-instructions.md
 
 # Local working notes (plans, scratch analysis)
 notes/
