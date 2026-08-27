@@ -124,6 +124,11 @@ Two more workflows guard the supply chain:
 weekly plus per-PR) and [.github/dependabot.yml](.github/dependabot.yml) (monthly GitHub Actions
 bumps, grouped into one PR).
 
+CodeQL only runs where code scanning is available: a public repository, or a private one with
+GitHub Advanced Security. Anywhere else the `analyze` job fails on the SARIF upload with
+`Code scanning is not enabled for this repository` — the workflow is fine, the repository
+setting is not.
+
 `pnpm check` is the local mirror of the `check` job, with two deliberate differences: it runs
 `test` rather than `test:coverage` (so it will not fail you on the coverage thresholds) and it
 stops short of `build`. `pnpm check:all` adds the e2e suite. For full certainty before pushing,
