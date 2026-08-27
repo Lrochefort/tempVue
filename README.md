@@ -32,11 +32,14 @@ prints it.
 apps/
   web/          Vue 3 application (Vite, Vue Router, Pinia, @lrochefort/vue-final-modal, VueUse)
   vfm-lab/      Conformance lab for @lrochefort/vue-final-modal v5 — every configuration, tested
+    src/        67 variants + their unit specs (Vitest, jsdom)
+    e2e/        the same gallery driven by Playwright in a real browser
 packages/
   ui/           Shared Vue SFC components (BaseButton, BaseCard), consumed straight from source
   utils/        Framework-agnostic TypeScript helpers, bundled with tsdown for publishing
 .github/
-  workflows/    CI (see below)
+  workflows/    CI and CodeQL (see below)
+  dependabot.yml
 ```
 
 Dependency versions live in a single pnpm **catalog** in `pnpm-workspace.yaml`; every package
@@ -104,12 +107,27 @@ port through `pnpm run` does not work — `pnpm run preview -- --port 4174` forw
 ## CI
 
 [.github/workflows/ci.yml](.github/workflows/ci.yml) runs on every pull request and on pushes to
-`main`, `master` and `develop`: Ubuntu, Node 24, `pnpm install --frozen-lockfile`, then
-`format:check` → `lint` → `typecheck` → `test:coverage` → `build`.
+`main`, `master` and `develop`, on Ubuntu with Node 24 and
+`pnpm install --frozen-lockfile`. Two independent jobs:
 
-`pnpm check` is the local mirror, with two deliberate differences: it runs `test` rather than
-`test:coverage` (so it will not fail you on the coverage thresholds) and it stops short of
-`build`. Run `pnpm test:coverage && pnpm build` as well before pushing if you want certainty.
+| Job     | Does                                                                                                        |
+| ------- | ----------------------------------------------------------------------------------------------------------- |
+| `check` | `format:check` → `lint` → `typecheck` → `test:coverage` → `build`                                           |
+| `e2e`   | installs the Playwright chromium binary, then `xvfb-run … pnpm run test:e2e`; uploads the report on failure |
+
+`xvfb-run` is not optional: the `chromium-headed` project exists because headless chromium paints
+overlay scrollbars that occupy no layout width, which leaves `reserveScrollBarGap` nothing to
+compensate for.
+
+Two more workflows guard the supply chain:
+[.github/workflows/codeql.yml](.github/workflows/codeql.yml) (JavaScript/TypeScript scanning,
+weekly plus per-PR) and [.github/dependabot.yml](.github/dependabot.yml) (monthly GitHub Actions
+bumps, grouped into one PR).
+
+`pnpm check` is the local mirror of the `check` job, with two deliberate differences: it runs
+`test` rather than `test:coverage` (so it will not fail you on the coverage thresholds) and it
+stops short of `build`. `pnpm check:all` adds the e2e suite. For full certainty before pushing,
+`pnpm test:coverage && pnpm build && pnpm test:e2e`.
 
 ## Notes
 
