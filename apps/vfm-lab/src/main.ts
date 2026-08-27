@@ -8,4 +8,9 @@ import '@lrochefort/vue-final-modal/style.css'
 import '@tempvue/ui/style.css'
 import './assets/lab.css'
 
-createApp(App).use(createAppRouter()).use(createVfm()).mount('#app')
+const vfm = createVfm()
+
+// The lab exists to be tested: the e2e suite drives the plugin API directly.
+;(window as Window & { __vfm?: unknown }).__vfm = vfm
+
+createApp(App).use(createAppRouter()).use(vfm).mount('#app')

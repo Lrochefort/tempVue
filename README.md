@@ -56,6 +56,7 @@ this file is the documentation. `apps/vfm-lab` does:
 | Format    | oxfmt (`.oxfmtrc.json`, includes import sorting)   |
 | Types     | TypeScript + vue-tsc                               |
 | Tests     | Vitest (jsdom) + @vue/test-utils + @pinia/testing  |
+| E2E       | Playwright (chromium) against `apps/vfm-lab`       |
 
 oxfmt covers Markdown too, so `pnpm format:check` will fail on the files you are reading if they
 drift — run `pnpm format` after editing them.
@@ -74,6 +75,9 @@ pnpm test --project vfm-lab   # …or just one (projects: web, vfm-lab, ui, util
 pnpm test:watch       # watch mode
 pnpm test:ui          # Vitest UI
 pnpm test:coverage    # v8 coverage, 80% globally and 90% for apps/vfm-lab/src
+pnpm test:e2e         # Playwright e2e over the vfm-lab gallery (chromium)
+pnpm test:e2e:ui      # Playwright UI mode
+pnpm test:e2e:report  # open the last Playwright HTML report
 
 pnpm lint             # oxlint
 pnpm lint:fix         # oxlint --fix
@@ -82,6 +86,7 @@ pnpm format:check     # oxfmt --check
 pnpm typecheck        # vue-tsc / tsc across all packages
 
 pnpm check            # format:check + lint + typecheck + test
+pnpm check:all        # check + test:e2e (needs the Playwright chromium binary)
 ```
 
 `pnpm preview` is `pnpm --filter @tempvue/web preview`, so it serves the web app alone even
@@ -120,5 +125,6 @@ port through `pnpm run` does not work — `pnpm run preview -- --port 4174` forw
   the whole run.
 - `apps/vfm-lab` exists to certify `@lrochefort/vue-final-modal` v5 rather than to ship a feature.
   It holds 67 variants across 11 groups, each with its own spec, and is held to a 90% coverage
-  bar. See [apps/vfm-lab/README.md](apps/vfm-lab/README.md) for the variant matrix, the jsdom
-  caveats and the findings.
+  bar. Phase 2 adds a Playwright suite (`apps/vfm-lab/e2e`) that sweeps every variant in a real
+  chromium and retires the jsdom caveats. See [apps/vfm-lab/README.md](apps/vfm-lab/README.md)
+  for the variant matrix, the e2e conventions and the findings.

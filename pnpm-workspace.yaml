@@ -34,6 +34,7 @@ catalog:
 
   # testing
   '@pinia/testing': ^2.0.1
+  '@playwright/test': ^1.56.0
   '@vitest/coverage-v8': ^4.1.11
   '@vitest/ui': ^4.1.11
   '@vue/test-utils': ^2.4.11

@@ -1,7 +1,7 @@
 import { fileURLToPath, URL } from 'node:url'
 
 import vue from '@vitejs/plugin-vue'
-import { defineConfig } from 'vitest/config'
+import { configDefaults, defineConfig } from 'vitest/config'
 
 export default defineConfig({
   plugins: [vue()],
@@ -25,6 +25,8 @@ export default defineConfig({
     name: 'vfm-lab',
     environment: 'jsdom',
     include: ['src/**/*.{test,spec}.ts'],
+    // Playwright owns e2e/; its specs must never be collected by Vitest.
+    exclude: [...configDefaults.exclude, 'e2e/**'],
     setupFiles: ['./vitest.setup.ts'],
   },
 })
